@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h3>Cases</h3>
+
+<form method="POST" action="/cases/create" class="mb-3">
+
+    <input class="form-control mb-2" name="case_name" placeholder="Case Name">
+
+    <textarea class="form-control mb-2" name="description" placeholder="Description"></textarea>
+
+    <button class="btn btn-primary">Create Case</button>
+
+</form>
+
+<hr>
+
+<table class="table table-bordered">
+
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Status</th>
+        <th>Created</th>
+    </tr>
+
+    {% for c in cases %}
+    <tr>
+        <td>{{ c.id }}</td>
+        <td>{{ c.case_name }}</td>
+        <td>{{ c.status }}</td>
+        <td>{{ c.created_at }}</td>
+    </tr>
+    {% endfor %}
+
+</table>
+
+{% endblock %}

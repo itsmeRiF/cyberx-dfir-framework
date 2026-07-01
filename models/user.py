@@ -7,18 +7,8 @@ class User(UserMixin, db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
 
-    username = db.Column(
-        db.String(50),
-        unique=True,
-        nullable=False
-    )
+    username = db.Column(db.String(50), unique=True, nullable=False)
 
-    password = db.Column(
-        db.String(255),
-        nullable=False
-    )
+    password = db.Column(db.String(255), nullable=False)
 
-    role = db.Column(
-        db.String(20),
-        default="Analyst"
-    )
+    role = db.Column(db.String(20), default="analyst")
