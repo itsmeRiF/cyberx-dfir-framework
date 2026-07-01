@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h3>Events - Case {{ case_id }}</h3>
+
+<table class="table table-dark table-striped">
+
+    <thead>
+        <tr>
+            <th>Event ID</th>
+            <th>Provider</th>
+            <th>Level</th>
+            <th>Severity</th>
+            <th>Message</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        {% for e in events %}
+
+        <tr>
+            <td>{{ e.event_id }}</td>
+            <td>{{ e.provider }}</td>
+            <td>{{ e.level }}</td>
+
+            <td>
+                {% if e.severity == "high" %}
+                    <span class="badge bg-danger">HIGH</span>
+                {% elif e.severity == "medium" %}
+                    <span class="badge bg-warning text-dark">MED</span>
+                {% else %}
+                    <span class="badge bg-secondary">LOW</span>
+                {% endif %}
+            </td>
+
+            <td>{{ e.message }}</td>
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}

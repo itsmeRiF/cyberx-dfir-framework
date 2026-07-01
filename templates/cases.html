@@ -23,6 +23,7 @@
         <th>Name</th>
         <th>Status</th>
         <th>Created</th>
+        <th>Actions</th>
     </tr>
 
     {% for c in cases %}
@@ -31,6 +32,21 @@
         <td>{{ c.case_name }}</td>
         <td>{{ c.status }}</td>
         <td>{{ c.created_at }}</td>
+
+        <td>
+            <a href="/events/{{ c.id }}" class="btn btn-sm btn-info">
+                View Events
+            </a>
+        </td>
+		<td>
+    <a href="/events/{{ c.id }}" class="btn btn-sm btn-info">
+        Events
+    </a>
+
+    <a href="/evidence/{{ c.id }}" class="btn btn-sm btn-warning">
+        Upload Evidence
+    </a>
+</td>
     </tr>
     {% endfor %}
 

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h3>Evidence Upload (Case {{ case_id }})</h3>
+
+<form method="POST" action="/evidence/upload/{{ case_id }}" enctype="multipart/form-data">
+
+    <input type="file" name="file" class="form-control mb-2">
+
+    <button class="btn btn-success">Upload & Parse</button>
+
+</form>
+
+{% endblock %}
