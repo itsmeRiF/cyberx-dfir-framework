@@ -44,28 +44,26 @@ def upload_evidence(case_id):
 
     # run parser
     output_dir = os.path.join(Config.OUTPUT_FOLDER, str(case_id))
-
     tool_path = os.path.join(Config.TOOL_FOLDER, "hayabusa.exe")
 
-    events = run_hayabusa(
-    save_path,
-    output_dir,
-    tool_path
-    )
+    events = run_hayabusa(save_path, output_dir, Config.TOOL_FOLDER + "/hayabusa.exe")
 
-    # store events in DB (FIXED)
     event_objects = []
 
     for e in events:
-
         event_objects.append(
             Event(
                 case_id=case_id,
-                event_id=str(e.get("event_id", "")),
-                provider=str(e.get("provider", "")),
-                level=str(e.get("level", "")),
-                message=str(e.get("message", "")),
-                timestamp=e.get("timestamp", None)
+                timestamp=e["timestamp"],
+                computer=e["computer"],
+                channel=e["channel"],
+                event_id=e["event_id"],
+                record_id=e["record_id"],
+                rule_title=e["rule_title"],
+                rule_id=e["rule_id"],
+                severity=e["severity"],
+                details=e["details"],
+                extra_info=e["extra_info"]
             )
         )
 
@@ -74,5 +72,5 @@ def upload_evidence(case_id):
 
     return {
         "message": "Evidence processed",
-        "events_count": len(events)
+        "events_count": len(event_objects)
     }

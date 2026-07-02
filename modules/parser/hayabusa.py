@@ -1,6 +1,8 @@
 import os
 import subprocess
 import pandas as pd
+from dateutil import parser as dateparser
+
 
 def run_hayabusa(evtx_path, output_dir, tool_path):
 
@@ -9,43 +11,51 @@ def run_hayabusa(evtx_path, output_dir, tool_path):
     evtx_path = os.path.abspath(evtx_path)
     tool_path = os.path.abspath(tool_path)
 
-    output_file = os.path.join(output_dir, "hayabusa_timeline.csv")
-    output_file = os.path.abspath(output_file)
+    output_file = os.path.join(output_dir, "hayabusa.csv")
 
     cmd = [
-         tool_path,
+        tool_path,
         "csv-timeline",
         "-f", evtx_path,
         "-o", output_file,
-        "-w",                 # or --no-wizard
-        "-C"                  # overwrite output if it exists
-]
+        "-w",
+        "-C"
+    ]
+
     result = subprocess.run(
         cmd,
+        cwd=os.path.dirname(tool_path),
         capture_output=True,
-        text=False,
-        cwd=os.path.dirname(tool_path)
+        text=True,
+        encoding="utf-8",
+        errors="ignore"
     )
-
-    # DEBUG (IMPORTANT)
-    if result.stderr:
-        print("HAYABUSA ERROR:", result.stderr.decode(errors="ignore"))
 
     if not os.path.exists(output_file):
         return []
 
-    df = pd.read_csv(output_file, encoding="utf-8", errors="ignore").fillna("")
+    df = pd.read_csv(output_file).fillna("")
 
-    results = []
+    events = []
 
     for _, row in df.iterrows():
-        results.append({
-            "timestamp": row.get("Timestamp", ""),
+
+        try:
+            ts = dateparser.parse(row["Timestamp"])
+        except:
+            ts = None
+
+        events.append({
+            "timestamp": ts,
+            "computer": row.get("Computer", ""),
+            "channel": row.get("Channel", ""),
             "event_id": str(row.get("EventID", "")),
-            "provider": row.get("Provider", ""),
-            "level": row.get("Level", ""),
-            "rule": row.get("RuleTitle", ""),
-            "message": row.get("Message", "")
+            "record_id": str(row.get("RecordID", "")),
+            "rule_title": row.get("RuleTitle", ""),
+            "rule_id": row.get("RuleID", ""),
+            "severity": row.get("Level", ""),
+            "details": row.get("Details", ""),
+            "extra_info": row.get("ExtraFieldInfo", "")
         })
 
-    return results
+    return events

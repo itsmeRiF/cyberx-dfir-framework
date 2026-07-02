@@ -14,8 +14,8 @@
         <tr>
             <th>Time</th>
             <th>Event ID</th>
-            <th>Level</th>
-            <th>Message</th>
+            <th>Severity</th>
+            <th>Details</th>
         </tr>
     </thead>
 
@@ -28,8 +28,8 @@
             <td>
                 <span class="badge bg-info">{{ e.event_id }}</span>
             </td>
-            <td>{{ e.level }}</td>
-            <td>{{ e.message }}</td>
+            <td>{{ e.severity }}</td>
+            <td>{{ e.details }}</td>
         </tr>
 
         {% endfor %}

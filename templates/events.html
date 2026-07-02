@@ -9,10 +9,10 @@
     <thead>
         <tr>
             <th>Event ID</th>
-            <th>Provider</th>
-            <th>Level</th>
+            <th>Computer</th>
             <th>Severity</th>
-            <th>Message</th>
+            <th>Severity</th>
+            <th>Details</th>
         </tr>
     </thead>
 
@@ -22,8 +22,8 @@
 
         <tr>
             <td>{{ e.event_id }}</td>
-            <td>{{ e.provider }}</td>
-            <td>{{ e.level }}</td>
+            <td>{{ e.computer }}</td>
+            <td>{{ e.severity }}</td>
 
             <td>
                 {% if e.severity == "high" %}
@@ -35,7 +35,7 @@
                 {% endif %}
             </td>
 
-            <td>{{ e.message }}</td>
+            <td>{{ e.details }}</td>
         </tr>
 
         {% endfor %}

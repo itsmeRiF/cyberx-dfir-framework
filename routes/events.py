@@ -19,9 +19,9 @@ def view_events(case_id):
 
         enriched.append({
             "event_id": e.event_id,
-            "provider": e.provider,
-            "level": e.level,
-            "message": e.message,
+            "computer": e.computer,
+            "severity": e.severity,
+            "details": e.details,
             "severity": get_severity(e.event_id)
         })
 
