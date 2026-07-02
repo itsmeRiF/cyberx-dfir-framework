@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h3>Timeline - Case {{ case_id }}</h3>
+
+<hr>
+
+<h5>Events</h5>
+
+<table class="table table-dark table-striped">
+
+    <thead>
+        <tr>
+            <th>Time</th>
+            <th>Event ID</th>
+            <th>Level</th>
+            <th>Message</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        {% for e in events %}
+
+        <tr>
+            <td>{{ e.timestamp }}</td>
+            <td>
+                <span class="badge bg-info">{{ e.event_id }}</span>
+            </td>
+            <td>{{ e.level }}</td>
+            <td>{{ e.message }}</td>
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}

@@ -5,7 +5,8 @@ from werkzeug.utils import secure_filename
 
 from models.evidence import Evidence
 from database.db import db
-from modules.parser.evtx import run_evtxecmd
+#from modules.parser.evtx import run_evtxecmd
+from modules.parser.hayabusa import run_hayabusa
 from config import Config
 from models.event import Event
 
@@ -44,10 +45,12 @@ def upload_evidence(case_id):
     # run parser
     output_dir = os.path.join(Config.OUTPUT_FOLDER, str(case_id))
 
-    events = run_evtxecmd(
-        save_path,
-        output_dir,
-        os.path.join(Config.TOOL_FOLDER, "EvtxECmd.exe")
+    tool_path = os.path.join(Config.TOOL_FOLDER, "hayabusa.exe")
+
+    events = run_hayabusa(
+    save_path,
+    output_dir,
+    tool_path
     )
 
     # store events in DB (FIXED)
@@ -58,10 +61,11 @@ def upload_evidence(case_id):
         event_objects.append(
             Event(
                 case_id=case_id,
-                event_id=e.get("event_id", ""),
-                provider=e.get("provider", ""),
-                level=e.get("level", ""),
-                message=e.get("message", "")
+                event_id=str(e.get("event_id", "")),
+                provider=str(e.get("provider", "")),
+                level=str(e.get("level", "")),
+                message=str(e.get("message", "")),
+                timestamp=e.get("timestamp", None)
             )
         )
 
