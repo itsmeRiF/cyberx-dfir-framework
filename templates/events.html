@@ -173,9 +173,9 @@ Medium
 Low
 </option>
 
-<option value="informational"
-{% if severity_filter=="informational" %}selected{% endif %}>
-Informational
+<option value="info"
+{% if severity_filter=="info" %}selected{% endif %}>
+Information
 </option>
 
 </select>
@@ -359,71 +359,45 @@ Clear Filters
 
                 <td>
 
-                    {% set sev=(e.severity or "")|lower %}
+ {% set sev = (e.severity or "")|lower|trim %}
 
-                    {% if sev=="critical" %}
+{% if sev == "critical" %}
 
-                        <span class="badge bg-dark text-danger">
-                            CRITICAL
-                        </span>
+    <span class="badge bg-dark text-danger">
+        CRITICAL
+    </span>
 
-                    {% elif sev=="high" %}
+{% elif sev == "high" %}
 
-                        <span class="badge bg-danger">
-                            HIGH
-                        </span>
+    <span class="badge bg-danger">
+        HIGH
+    </span>
 
-                    {% elif sev=="medium" %}
+{% elif sev == "medium" or sev == "med" %}
 
-                        <span class="badge bg-warning text-dark">
-                            MEDIUM
-                        </span>
+    <span class="badge bg-warning text-dark">
+        MEDIUM
+    </span>
 
-                    {% elif sev=="low" %}
+{% elif sev == "low" %}
 
-                        <span class="badge bg-success">
-                            LOW
-                        </span>
+    <span class="badge bg-success">
+        LOW
+    </span>
 
-                    {% else %}
+{% elif sev in ["info", "information", "informational"] %}
 
-                        <span class="badge bg-info text-dark">
-                            {{ e.severity }}
-                        </span>
+    <span class="badge bg-info text-dark">
+        INFO
+    </span>
 
-                    {% endif %}
+{% else %}
 
-                </td>
+    <span class="badge bg-secondary">
+        {{ e.severity }}
+    </span>
 
-                <td>
-
-                    {{ e.rule_title }}
-
-                </td>
-
-                <td>
-
-                    {{ e.computer }}
-
-                </td>
-
-                <td>
-
-                    {{ e.event_id }}
-
-                </td>
-
-                <td>
-
-                    {% if e.details|length > 120 %}
-
-                        {{ e.details[:120] }}...
-
-                    {% else %}
-
-                        {{ e.details }}
-
-                    {% endif %}
+{% endif %}
 
                 </td>
 

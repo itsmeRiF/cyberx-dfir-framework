@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, Response
 from flask_login import login_required
-from sqlalchemy import or_
+from sqlalchemy import or_, func
 
 from database.db import db
 from models.event import Event
@@ -112,6 +112,55 @@ def view_events(case_id):
     low = query.filter(Event.severity.ilike("low")).count()
 
     informational = query.filter(Event.severity.ilike("informational")).count()
+
+
+
+
+# --------------------------
+# STATS (Entire Case)
+# --------------------------
+
+    stats = (
+        db.session.query(
+            func.lower(Event.severity),
+            func.count(Event.id)
+        )
+        .filter(Event.case_id == case_id)
+        .group_by(func.lower(Event.severity))
+        .all()
+    )
+
+# DEBUG (Terminal me actual values dikhenge)
+    print("Severity Stats:", stats)
+
+    severity_counts = {}
+
+    for sev, cnt in stats:
+        key = (sev or "").strip().lower()
+        severity_counts[key] = cnt
+
+    total = (
+        db.session.query(func.count(Event.id))
+        .filter(Event.case_id == case_id)
+        .scalar()
+    )
+
+    critical = severity_counts.get("critical", 0)
+
+    high = severity_counts.get("high", 0)
+
+    medium = (
+        severity_counts.get("medium", 0)
+        + severity_counts.get("med", 0)
+    )
+
+    low = severity_counts.get("low", 0)
+
+    informational = (
+        severity_counts.get("informational", 0)
+        + severity_counts.get("information", 0)
+        + severity_counts.get("info", 0)
+    )
 
     # --------------------------
     # DROPDOWNS
