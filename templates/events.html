@@ -303,3 +303,149 @@ Clear Filters
 </div>
 
 </form>
+
+<div class="card shadow">
+
+    <div class="card-header bg-dark text-white d-flex justify-content-between">
+
+        <span>
+            <i class="bi bi-table"></i>
+            Events
+        </span>
+
+        <span>
+            Showing {{ events|length }} records
+        </span>
+
+    </div>
+
+    <div class="table-responsive">
+
+        <table class="table table-dark table-hover table-striped align-middle mb-0">
+
+            <thead class="table-secondary text-dark">
+
+                <tr>
+
+                    <th width="160">Timestamp</th>
+
+                    <th width="90">Severity</th>
+
+                    <th width="220">Rule</th>
+
+                    <th width="120">Computer</th>
+
+                    <th width="90">Event ID</th>
+
+                    <th>Details</th>
+
+                    <th width="90">Action</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+            {% for e in events %}
+
+            <tr>
+
+                <td>
+
+                    {{ e.timestamp }}
+
+                </td>
+
+                <td>
+
+                    {% set sev=(e.severity or "")|lower %}
+
+                    {% if sev=="critical" %}
+
+                        <span class="badge bg-dark text-danger">
+                            CRITICAL
+                        </span>
+
+                    {% elif sev=="high" %}
+
+                        <span class="badge bg-danger">
+                            HIGH
+                        </span>
+
+                    {% elif sev=="medium" %}
+
+                        <span class="badge bg-warning text-dark">
+                            MEDIUM
+                        </span>
+
+                    {% elif sev=="low" %}
+
+                        <span class="badge bg-success">
+                            LOW
+                        </span>
+
+                    {% else %}
+
+                        <span class="badge bg-info text-dark">
+                            {{ e.severity }}
+                        </span>
+
+                    {% endif %}
+
+                </td>
+
+                <td>
+
+                    {{ e.rule_title }}
+
+                </td>
+
+                <td>
+
+                    {{ e.computer }}
+
+                </td>
+
+                <td>
+
+                    {{ e.event_id }}
+
+                </td>
+
+                <td>
+
+                    {% if e.details|length > 120 %}
+
+                        {{ e.details[:120] }}...
+
+                    {% else %}
+
+                        {{ e.details }}
+
+                    {% endif %}
+
+                </td>
+
+                <td>
+
+                    <a
+                        href="/event/{{ e.id }}"
+                        class="btn btn-sm btn-outline-info"
+                    >
+                        View
+                    </a>
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
